@@ -1,0 +1,317 @@
+{
+    "interface": {
+        "fps": 70,
+        "fonts": {
+            "Segoe-Regular": "D:/solomon/self/olympic_tasks/tp/gomoku/client/interfaces/graphic/src/fonts/Segoe UI.ttf",
+            "Segoe-Bold": "D:/solomon/self/olympic_tasks/tp/gomoku/client/interfaces/graphic/src/fonts/Segoe UI Bold.ttf"
+        },
+        "pages": {
+            "anteroom": {
+                "style": {
+                    "background": "#0B121B"
+                },
+                "elements": {
+                    "button_play_online": {
+                        "type": "button",
+                        "text": "Play Online",
+                        "style": {
+                            "size": [300, 42],
+                            "background": "#0ea580",
+                            "font": "Segoe-Bold",
+                            "font-weight": 18,
+                            "color": "white",
+                            "border-radius": 3,
+                            "offset": ["center", "center"],
+                            "margin": [0, -30],
+                            "z-index": 10,
+                            "hover": {
+                                "background": "#18BC9C",
+                                "cursor": "SYSTEM_CURSOR_HAND"
+                            }
+                        }
+                    },
+                    "button_play_with_friend": {
+                        "type": "button",
+                        "text": "Play With Friend",
+                        "style": {
+                            "size": [300, 42],
+                            "background": "#0ea580",
+                            "font": "Segoe-Bold",
+                            "font-weight": 18,
+                            "color": "white",
+                            "border-radius": 3,
+                            "offset": ["center", "center"],
+                            "margin": [0, 30],
+                            "z-index": 10,
+                            "hover": {
+                                "background": "#18BC9C",
+                                "cursor": "SYSTEM_CURSOR_HAND"
+                            }
+                        }
+                    },
+                    "overlay": {
+                        "type": "div",
+                        "style": {
+                            "background": "black",
+                            "alpha": 80,
+                            "size": ["100%", "100%"],
+                            "offset": [0, 0],
+                            "margin": [0, 0],
+                            "z-index": 20,
+                            "display": false
+                        }
+                    },
+                    "form": {
+                        "type": "div",
+                        "style": {
+                            "size": [0, 0],
+                            "offset": ["center", "center"],
+                            "margin": [0, 0],
+                            "background": "#233448",
+                            "border-radius": 3,
+                            "z-index": 30,
+                            "display": false,
+                            "animation": {
+                                "open": {
+                                    "styles": ["size"],
+                                    "size": [338, 420],
+                                    "duration": 0.2,
+                                    "on_done": {}
+                                },
+                                "close": {
+                                    "styles": ["size"],
+                                    "size": [0, 0],
+                                    "duration": 0.2,
+                                    "on_done": {
+                                        "display": false
+                                    }
+                                }
+                            }
+                        },
+                        "elements": {
+                            "label_field_1": {
+                                "type": "text",
+                                "text": "Field width",
+                                "style": {
+                                    "font": "Segoe-Regular",
+                                    "font-weight": "5.2%",
+                                    "color": "#d1d4dc",
+                                    "offset": [0, 0],
+                                    "margin": ["7.396%", "4.2%"],
+                                    "z-index": 30
+                                }
+                            },
+                            "label_field_2": {
+                                "type": "text",
+                                "text": "Field height",
+                                "style": {
+                                    "font": "Segoe-Regular",
+                                    "font-weight": "5.2%",
+                                    "color": "#d1d4dc",
+                                    "offset": [0, 0],
+                                    "margin": ["7.396%", "28.6%"],
+                                    "z-index": 30
+                                }
+                            },
+                            "label_field_3": {
+                                "type": "text",
+                                "text": "Minutes per player",
+                                "style": {
+                                    "font": "Segoe-Regular",
+                                    "font-weight": "5.2%",
+                                    "color": "#d1d4dc",
+                                    "offset": [0, 0],
+                                    "margin": ["7.396%", "52.8%"],
+                                    "z-index": 30
+                                }
+                            },
+                            "input_field_1": {
+                                "type": "input_integer",
+                                "value": 15,
+                                "min_value": 3,
+                                "max_value": 30,
+                                "style": {
+                                    "size": ["85.2%", "10.7%"],
+                                    "background": "#233448",
+                                    "font": "Segoe-Bold",
+                                    "font-weight": "4.4%",
+                                    "color": "#d1d4dc",
+                                    "border-width": 1,
+                                    "border-color": "#d1d4dc",
+                                    "font-offset": ["5.4%", "center"],
+                                    "font-margin": [0, 0],
+                                    "border-rect-radius": 5,
+                                    "border-radius": 4,
+                                    "offset": ["left", "left"],
+                                    "margin": ["7.4%", "14.2%"],
+                                    "z-index": 32,
+                                    "hover": {
+                                        "cursor": "SYSTEM_CURSOR_SIZENS"
+                                    }
+                                }
+                            },
+                            "input_field_2": {
+                                "type": "input_integer",
+                                "value": 15,
+                                "min_value": 3,
+                                "max_value": 30,
+                                "style": {
+                                    "size": ["85.2%", "10.7%"],
+                                    "background": "#233448",
+                                    "font": "Segoe-Bold",
+                                    "font-weight": "4.4%",
+                                    "color": "#d1d4dc",
+                                    "border-width": 1,
+                                    "border-color": "#d1d4dc",
+                                    "font-offset": ["5.4%", "center"],
+                                    "font-margin": [0, 0],
+                                    "border-rect-radius": 5,
+                                    "border-radius": 4,
+                                    "offset": [0, 0],
+                                    "margin": ["7.4%", "38.57%"],
+                                    "z-index": 32,
+                                    "hover": {
+                                        "cursor": "SYSTEM_CURSOR_SIZENS"
+                                    }
+                                }
+                            },
+                            "input_field_3": {
+                                "type": "input_integer",
+                                "value": 20,
+                                "min_value": 1,
+                                "max_value": 60,
+                                "style": {
+                                    "size": ["85.2%", "10.7%"],
+                                    "background": "#233448",
+                                    "font": "Segoe-Bold",
+                                    "font-weight": "4.4%",
+                                    "color": "#d1d4dc",
+                                    "border-width": 1,
+                                    "border-color": "#d1d4dc",
+                                    "font-offset": ["5.4%", "center"],
+                                    "font-margin": [0, 0],
+                                    "border-rect-radius": 5,
+                                    "border-radius": 4,
+                                    "offset": [0, 0],
+                                    "margin": ["7.4%", "62.857%"],
+                                    "z-index": 32,
+                                    "hover": {
+                                        "cursor": "SYSTEM_CURSOR_SIZENS"
+                                    }
+                                }
+                            },
+                            "cancel": {
+                                "type": "button",
+                                "text": "Cancel",
+                                "style": {
+                                    "size": ["40%", "8.9%"],
+                                    "background": "#19242e",
+                                    "font": "Segoe-Bold",
+                                    "font-weight": "4.4%",
+                                    "color": "#668bad",
+                                    "border-radius": 3,
+                                    "border-width": 1,
+                                    "border-color": "#233448",
+                                    "border-rect-radius": 4,
+                                    "offset": ["left", "right"],
+                                    "margin": ["7.4%", "-7.4%"],
+                                    "z-index": 30,
+                                    "hover": {
+                                        "border-color": "#b3b7c4",
+                                        "cursor": "SYSTEM_CURSOR_HAND"
+                                    }
+                                }
+                            },
+                            "continue_button": {
+                                "type": "button",
+                                "text": "Continue",
+                                "style": {
+                                    "size": ["40%", "8.9%"],
+                                    "background": "#0ea580",
+                                    "font": "Segoe-Bold",
+                                    "font-weight": "4.4%",
+                                    "color": "white",
+                                    "border-radius": 3,
+                                    "offset": ["right", "right"],
+                                    "margin": ["-7.4%", "-7.4%"],
+                                    "z-index": 30,
+                                    "hover": {
+                                        "background": "#18BC9C",
+                                        "cursor": "SYSTEM_CURSOR_HAND"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "waiting_room": {
+                "style": {
+                    "background": "#0B121B"
+                },
+                "elements": {
+                    "loader": {
+                        "type": "image",
+                        "path": "D:/solomon/self/olympic_tasks/tp/gomoku/client/interfaces/graphic/src/images/loader.png",
+                        "style": {
+                            "size": [50, 50],
+                            "offset": ["center", "center"],
+                            "margin": [0, -60],
+                            "z-index": 10,
+                            "rotation-period": 2
+                        }
+                    },
+                    "text": {
+                        "type": "text",
+                        "text": "Waiting for opponent...",
+                        "style": {
+                            "font": "Segoe-Bold",
+                            "font-weight": 30,
+                            "color": "#2C3E50",
+                            "offset": ["center", "center"],
+                            "margin": [0, 15],
+                            "z-index": 10
+                        }
+                    },
+                    "leave": {
+                        "type": "button",
+                        "text": "Leave Room",
+                        "style": {
+                            "size": [180, 60],
+                            "background": "#19242e",
+                            "font": "Segoe-Bold",
+                            "font-weight": 23,
+                            "color": "#668bad",
+                            "border-radius": 3,
+                            "offset": ["center", "center"],
+                            "margin": [0, 110],
+                            "z-index": 10,
+                            "hover": {
+                                "background": "#2C3E50",
+                                "cursor": "SYSTEM_CURSOR_HAND"
+                            }
+                        }
+                    }
+                }
+            },
+            "battle": {
+                "style": {
+                    "background": "#101B27"
+                },
+                "elements": {
+                    "grid": {
+                        "type": "grid",
+                        "style": {
+                            "background": "#0C141D",
+                            "color": "#2C3E50",
+                            "cell-size": [35, 35],
+                            "offset": ["center", "center"],
+                            "margin": [0, 0],
+                            "z-index": 10
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
