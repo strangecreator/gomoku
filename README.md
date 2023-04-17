@@ -2,6 +2,7 @@
 
 ## Pictures
 ![Anteroom](preview/anteroom.png)
+![Menu](preview/menu.png)
 ![Waiting Room](preview/waiting_room.png)
 ![Battle Grid](preview/grid.png)
 
