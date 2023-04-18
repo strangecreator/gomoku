@@ -5,6 +5,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(BASE_DIR))
 
+print(BASE_DIR)
+
 # dependencies
 from game_logic.main import State
 from connection.main import Connection
@@ -108,7 +110,7 @@ if __name__ == "__main__":
                         ui.Vector2D(0, 0),
                         {
                             "image": ui.Image(
-                                config.interface.pages.waiting_room.elements.loader.path,
+                                BASE_DIR.parent / config.interface.pages.waiting_room.elements.loader.path,
                                 helper.to_dict(config.interface.pages.waiting_room.elements.loader.style)
                             ),
                             "text": ui.Text(

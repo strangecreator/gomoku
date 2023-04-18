@@ -1,6 +1,13 @@
+import sys
 from dataclasses import dataclass
 from collections.abc import Callable
 import numbers, copy
+
+from pathlib import Path
+
+# base path resolving
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.append(str(BASE_DIR))
 
 # main framework
 import pygame
@@ -57,7 +64,7 @@ class FontsLoader:
 
     def get(self, name: str, font_weight: int) -> pygame.font.Font:
         if (name, font_weight) not in self.cached:
-            self.cached[(name, font_weight)] = pygame.font.Font(self.fonts[name], font_weight)
+            self.cached[(name, font_weight)] = pygame.font.Font(BASE_DIR.parent / self.fonts[name], font_weight)
         return self.cached[(name, font_weight)]
 
 
