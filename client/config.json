@@ -2,8 +2,8 @@
     "interface": {
         "fps": 70,
         "fonts": {
-            "Segoe-Regular": "D:/solomon/self/olympic_tasks/tp/gomoku/client/interfaces/graphic/src/fonts/Segoe UI.ttf",
-            "Segoe-Bold": "D:/solomon/self/olympic_tasks/tp/gomoku/client/interfaces/graphic/src/fonts/Segoe UI Bold.ttf"
+            "Segoe-Regular": "client/interfaces/graphic/src/fonts/Segoe UI.ttf",
+            "Segoe-Bold": "client/interfaces/graphic/src/fonts/Segoe UI Bold.ttf"
         },
         "pages": {
             "anteroom": {
@@ -252,7 +252,7 @@
                 "elements": {
                     "loader": {
                         "type": "image",
-                        "path": "D:/solomon/self/olympic_tasks/tp/gomoku/client/interfaces/graphic/src/images/loader.png",
+                        "path": "client/interfaces/graphic/src/images/loader.png",
                         "style": {
                             "size": [50, 50],
                             "offset": ["center", "center"],
