@@ -1,60 +1,24 @@
 import sys
-from dataclasses import dataclass
-from collections.abc import Callable
-import numbers, copy
-
 from pathlib import Path
 
 # base path resolving
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(BASE_DIR))
 
+from config_loader import *
+
+# dependencies
+import helper
+
+from collections.abc import Callable
+import numbers
+
 # main framework
 import pygame
 
 
-@dataclass
-class Vector2D:
-    x: int = 0
-    y: int = 0
-
-    def __iter__(self):
-        yield self.x
-        yield self.y
-
-    def __getitem__(self, index):
-        return self.x if index == 0 else self.y
-    
-    def __add__(self, vector):
-        return Vector2D(self.x + vector.x, self.y + vector.y)
-    
-    def __mul__(self, vector):
-        return Vector2D(self.x * vector.x, self.y * vector.y)
-
-@dataclass
-class Rect:
-    p1: Vector2D = Vector2D()
-    p2: Vector2D = Vector2D()
-
-    def __iter__(self):
-        yield self.p1
-        yield self.p2
-
-    @property
-    def x1(self) -> int:
-        return self.p1.x
-    
-    @property
-    def x2(self) -> int:
-        return self.p2.x
-    
-    @property
-    def y1(self) -> int:
-        return self.p1.y
-    
-    @property
-    def y2(self) -> int:
-        return self.p2.y
+Vector2D = helper.Vector2D
+Rect = helper.Rect
 
 
 class FontsLoader:
@@ -64,7 +28,7 @@ class FontsLoader:
 
     def get(self, name: str, font_weight: int) -> pygame.font.Font:
         if (name, font_weight) not in self.cached:
-            self.cached[(name, font_weight)] = pygame.font.Font(BASE_DIR.parent / self.fonts[name], font_weight)
+            self.cached[(name, font_weight)] = pygame.font.Font(BASE_DIR / self.fonts[name], font_weight)
         return self.cached[(name, font_weight)]
 
 
@@ -138,12 +102,13 @@ class StyleProcessor:
         font_weight = style.get("font-weight", 0)
         style["processed"]["font-weight"] = round(cls.procent(font_weight, window_size.y))
         return style
-    
-
-class PageController: pass
 
 
 class Animation: pass
+
+
+class PageController:
+    pass
 
 
 class Element:
@@ -474,12 +439,17 @@ class Text(StyledElement):
         super().update_style()
         self.process_styles(["font_weight"])
         if self.fonts_loader is not None:
-            self.text_surface = self.fonts_loader.get(self.get_style("font"), self.get_style("font-weight")).render(
-                self.text,
-                True,
-                pygame.color.Color(self.get_style("color", "white"))
-            )
-            self.style["processed"]["font-size"] = list(self.text_surface.get_size())
+            self.text_surface = []
+            for line in self.text.split('\n'):
+                self.text_surface.append(self.fonts_loader.get(self.get_style("font"), self.get_style("font-weight")).render(
+                    line,
+                    True,
+                    pygame.color.Color(self.get_style("color", "white"))
+                ))
+            self.style["processed"]["font-size"] = [
+                max(map(lambda surface: surface.get_size()[0], self.text_surface)),
+                sum(map(lambda surface: surface.get_size()[1], self.text_surface))
+            ]
             self.style["processed"]["size"] = self.style["processed"]["font-size"]
             self.process_styles(["margin", "offset", "font_offset"])
             self.rect = Rect(
@@ -499,7 +469,27 @@ class Text(StyledElement):
         super().render()
         if not self.get_style("display", True):
             return
-        self.surface.blit(self.text_surface, self.get_style("font-offset"))
+        size = self.get_style("size")
+        offset = self.get_style("font-offset")
+        align = self.get_style("font-align")
+        for i, surface in enumerate(self.text_surface):
+            current_offset = offset
+            if align == "right":
+                current_offset = (
+                    current_offset[0] + size[0] - surface.get_size()[0],
+                    current_offset[1] + i * surface.get_size()[1]
+                )
+            elif align == "center":
+                current_offset = (
+                    current_offset[0] + (size[0] - surface.get_size()[0]) // 2,
+                    current_offset[1] + i * surface.get_size()[1]
+                )
+            else: # align == left
+                current_offset = (
+                    current_offset[0],
+                    current_offset[1] + i * surface.get_size()[1]
+                )
+            self.surface.blit(surface, current_offset)
 
 class Grid(StyledElement):
     class StyleProcessor(StyleProcessor):
@@ -507,7 +497,7 @@ class Grid(StyledElement):
 
     def __init__(self, size: Vector2D, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.size = size
+        self.size = size + Vector2D(1, 1)
         self.rect = Rect()
 
     def update_style(self) -> None:
@@ -523,10 +513,45 @@ class Grid(StyledElement):
         super().update_bounds(window_size, window_offset)
         self.update_style()
 
+    def get_expected_move(self, pos: tuple[int, int]):
+        """
+        Gets expected move by the mouse position
+        """
+        pos = Vector2D(*pos)
+        if not self.is_point_in(pos):
+            return None
+        pos -= Vector2D(*self.get_style("offset"))
+        cell_size = Vector2D(*self.get_style("cell-size", [0, 0]))
+        pos = (pos - Vector2D(*cell_size) // 2) // Vector2D(*cell_size)
+        move = (pos.x + 1, self.size[1] - 1 - pos.y)
+        if (not self.document.bridge_connector.is_move_in_field(move) or 
+            self.document.bridge_connector.is_move_done(move)):
+            return None
+        return move
+
     def handle_event(self, event: pygame.event.Event) -> bool:
         if not self.get_style("display", True):
             return False
+        if event.type == pygame.MOUSEBUTTONUP:
+            move = self.get_expected_move(event.pos)
+            if move is not None:
+                self.document.bridge_connector.make_move(move)
         return False
+
+    def check_state(self, already_caught=False) -> bool:
+        if not self.get_style("display", True):
+            return False
+        # detect mouse
+        pos = pygame.mouse.get_pos()
+        if not already_caught and self.is_point_in(Vector2D(*pos)):
+            if not self.is_hover:
+                self.is_hover = True
+            return True
+        else:
+            if self.is_hover:
+                self.is_hover = False
+                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            return False
 
     def render(self) -> None:
         super().render()
@@ -570,11 +595,43 @@ class Grid(StyledElement):
                 )
             )
         # draw move
+        self.render_moves()
         self.render_expected_move()
 
-    def render_expected_move(self):
-        # pygame.draw.circle(self.surface, self., (x, y), R, w)
-        pass
+    def render_moves(self):
+        moves_handler = self.document.bridge_connector.get_moves()
+        for move in moves_handler.moves[0]:
+            self.render_move(move, self.style[f"point-background-{moves_handler.color[0]}"], self.style["point-radius"])
+        for move in moves_handler.moves[1]:
+            self.render_move(move, self.style[f"point-background-{moves_handler.color[1]}"], self.style["point-radius"])
+        last_move = self.document.bridge_connector.get_last_move()
+        if last_move is not None:
+            self.render_move(last_move, self.style["point-center-color"], self.style["point-center-radius"])
+
+    def render_expected_move(self) -> None:
+        if not self.is_hover:
+            return
+        if not self.document.bridge_connector.track:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            return
+        move = self.get_expected_move(pygame.mouse.get_pos())
+        if move is None:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            return
+        pygame.mouse.set_cursor(getattr(pygame, self.get_style("point-cursor", "SYSTEM_CURSOR_ARROW")))
+        color = self.style[f"point-background-{self.document.bridge_connector.track_color}"]
+        self.render_move(move, color, self.style["point-radius"])
+
+    def render_move(self, move: tuple[int, int], color: str, point_radius) -> None:
+        cell_size = Vector2D(*self.get_style("cell-size", [0, 0]))
+        pygame.draw.circle(
+            self.surface,
+            pygame.color.Color(color),
+            tuple((Vector2D(*self.get_style("offset")) + 
+            Vector2D(0, self.get_style("size")[1]) + 
+            Vector2D(move[0] * cell_size[0], - move[1] * cell_size[1]))),
+            point_radius
+        )
 
 class InputInteger(StyledElement):
     class StyleProcessor(StyleProcessor):
@@ -848,7 +905,9 @@ class PageController(object):
         self.pages = pages
         self._current_page = current_page
         self.fps = fps
+        self.fonts_loader = None
         self.surface = None
+        self.bridge_connector = None
 
     @property
     def current_page(self) -> str:
@@ -865,6 +924,7 @@ class PageController(object):
             page.change_surface(surface)
 
     def update_fonts(self, fonts_loader: FontsLoader) -> None:
+        self.fonts_loader = fonts_loader
         for page in self.pages.values():
             page.update_fonts(fonts_loader)
 
@@ -874,6 +934,8 @@ class PageController(object):
 
     def check_state(self) -> None:
         self.get_current_page().check_state()
+        if self.bridge_connector is not None:
+            self.bridge_connector.update()
 
     def render(self) -> None:
         self.get_current_page().render()
@@ -886,3 +948,16 @@ class PageController(object):
     
     def get_current_page(self) -> Page:
         return self.get_page(self.current_page)
+    
+
+def apply_initial_configuration_before(config, window_size: Vector2D) -> None:
+    # calculate limit values for anteroom form
+    cell_size = Vector2D(*getattr(config.interface.pages.battle.elements.container.elements.grid_container.elements.grid.style, "cell-size"))
+    # horizontal axis
+    container_horizontal_size = config.interface.pages.battle.elements.container.style.size[0]
+    config.interface.pages.anteroom.elements.form.elements.input_field_1.max_value = int((container_horizontal_size * 0.6 - 20 * 2) / cell_size.y) - 1
+    # vertical axis
+    config.interface.pages.anteroom.elements.form.elements.input_field_2.max_value = int((window_size.y * 0.8 - 20 * 2) / cell_size.y) - 1
+
+def apply_initial_configuration_after(document: PageController) -> None:
+    pass

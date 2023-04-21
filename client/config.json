@@ -2,8 +2,9 @@
     "interface": {
         "fps": 70,
         "fonts": {
-            "Segoe-Regular": "client/interfaces/graphic/src/fonts/Segoe UI.ttf",
-            "Segoe-Bold": "client/interfaces/graphic/src/fonts/Segoe UI Bold.ttf"
+            "Segoe-Regular": "interfaces/graphic/src/fonts/Segoe UI.ttf",
+            "Segoe-Bold": "interfaces/graphic/src/fonts/Segoe UI Bold.ttf",
+            "Bloomberg": "interfaces/graphic/src/fonts/Bloomberg.ttf"
         },
         "pages": {
             "anteroom": {
@@ -74,7 +75,7 @@
                             "animation": {
                                 "open": {
                                     "styles": ["size"],
-                                    "size": [338, 420],
+                                    "size": [338, 540],
                                     "duration": 0.2,
                                     "on_done": {}
                                 },
@@ -89,15 +90,27 @@
                             }
                         },
                         "elements": {
+                            "label_field_0": {
+                                "type": "text",
+                                "text": "Amount in a row",
+                                "style": {
+                                    "font": "Segoe-Regular",
+                                    "font-weight": "4.07%",
+                                    "color": "#d1d4dc",
+                                    "offset": [0, 0],
+                                    "margin": ["7.396%", "3.33%"],
+                                    "z-index": 30
+                                }
+                            },
                             "label_field_1": {
                                 "type": "text",
                                 "text": "Field width",
                                 "style": {
                                     "font": "Segoe-Regular",
-                                    "font-weight": "5.2%",
+                                    "font-weight": "4.07%",
                                     "color": "#d1d4dc",
                                     "offset": [0, 0],
-                                    "margin": ["7.396%", "4.2%"],
+                                    "margin": ["7.396%", "22.22%"],
                                     "z-index": 30
                                 }
                             },
@@ -106,10 +119,10 @@
                                 "text": "Field height",
                                 "style": {
                                     "font": "Segoe-Regular",
-                                    "font-weight": "5.2%",
+                                    "font-weight": "4.07%",
                                     "color": "#d1d4dc",
                                     "offset": [0, 0],
-                                    "margin": ["7.396%", "28.6%"],
+                                    "margin": ["7.396%", "41.11%"],
                                     "z-index": 30
                                 }
                             },
@@ -118,23 +131,23 @@
                                 "text": "Minutes per player",
                                 "style": {
                                     "font": "Segoe-Regular",
-                                    "font-weight": "5.2%",
+                                    "font-weight": "4.07%",
                                     "color": "#d1d4dc",
                                     "offset": [0, 0],
-                                    "margin": ["7.396%", "52.8%"],
+                                    "margin": ["7.396%", "60%"],
                                     "z-index": 30
                                 }
                             },
-                            "input_field_1": {
+                            "input_field_0": {
                                 "type": "input_integer",
-                                "value": 15,
+                                "value": 5,
                                 "min_value": 3,
-                                "max_value": 30,
+                                "max_value": 8,
                                 "style": {
-                                    "size": ["85.2%", "10.7%"],
+                                    "size": ["85.2%", "8.33%"],
                                     "background": "#233448",
                                     "font": "Segoe-Bold",
-                                    "font-weight": "4.4%",
+                                    "font-weight": "3.333%",
                                     "color": "#d1d4dc",
                                     "border-width": 1,
                                     "border-color": "#d1d4dc",
@@ -143,7 +156,32 @@
                                     "border-rect-radius": 5,
                                     "border-radius": 4,
                                     "offset": ["left", "left"],
-                                    "margin": ["7.4%", "14.2%"],
+                                    "margin": ["7.4%", "11.111%"],
+                                    "z-index": 32,
+                                    "hover": {
+                                        "cursor": "SYSTEM_CURSOR_SIZENS"
+                                    }
+                                }
+                            },
+                            "input_field_1": {
+                                "type": "input_integer",
+                                "value": 15,
+                                "min_value": 3,
+                                "max_value": 30,
+                                "style": {
+                                    "size": ["85.2%", "8.33%"],
+                                    "background": "#233448",
+                                    "font": "Segoe-Bold",
+                                    "font-weight": "3.333%",
+                                    "color": "#d1d4dc",
+                                    "border-width": 1,
+                                    "border-color": "#d1d4dc",
+                                    "font-offset": ["5.4%", "center"],
+                                    "font-margin": [0, 0],
+                                    "border-rect-radius": 5,
+                                    "border-radius": 4,
+                                    "offset": ["left", "left"],
+                                    "margin": ["7.4%", "30.4%"],
                                     "z-index": 32,
                                     "hover": {
                                         "cursor": "SYSTEM_CURSOR_SIZENS"
@@ -156,10 +194,10 @@
                                 "min_value": 3,
                                 "max_value": 30,
                                 "style": {
-                                    "size": ["85.2%", "10.7%"],
+                                    "size": ["85.2%", "8.33%"],
                                     "background": "#233448",
                                     "font": "Segoe-Bold",
-                                    "font-weight": "4.4%",
+                                    "font-weight": "3.333%",
                                     "color": "#d1d4dc",
                                     "border-width": 1,
                                     "border-color": "#d1d4dc",
@@ -168,7 +206,7 @@
                                     "border-rect-radius": 5,
                                     "border-radius": 4,
                                     "offset": [0, 0],
-                                    "margin": ["7.4%", "38.57%"],
+                                    "margin": ["7.4%", "48.888%"],
                                     "z-index": 32,
                                     "hover": {
                                         "cursor": "SYSTEM_CURSOR_SIZENS"
@@ -181,10 +219,10 @@
                                 "min_value": 1,
                                 "max_value": 60,
                                 "style": {
-                                    "size": ["85.2%", "10.7%"],
+                                    "size": ["85.2%", "8.33%"],
                                     "background": "#233448",
                                     "font": "Segoe-Bold",
-                                    "font-weight": "4.4%",
+                                    "font-weight": "3.333%",
                                     "color": "#d1d4dc",
                                     "border-width": 1,
                                     "border-color": "#d1d4dc",
@@ -193,7 +231,7 @@
                                     "border-rect-radius": 5,
                                     "border-radius": 4,
                                     "offset": [0, 0],
-                                    "margin": ["7.4%", "62.857%"],
+                                    "margin": ["7.4%", "67.77%"],
                                     "z-index": 32,
                                     "hover": {
                                         "cursor": "SYSTEM_CURSOR_SIZENS"
@@ -204,17 +242,17 @@
                                 "type": "button",
                                 "text": "Cancel",
                                 "style": {
-                                    "size": ["40%", "8.9%"],
+                                    "size": ["40%", "6.85%"],
                                     "background": "#19242e",
                                     "font": "Segoe-Bold",
-                                    "font-weight": "4.4%",
+                                    "font-weight": "3.333%",
                                     "color": "#668bad",
                                     "border-radius": 3,
                                     "border-width": 1,
                                     "border-color": "#233448",
                                     "border-rect-radius": 4,
                                     "offset": ["left", "right"],
-                                    "margin": ["7.4%", "-7.4%"],
+                                    "margin": ["7.4%", "-5.74%"],
                                     "z-index": 30,
                                     "hover": {
                                         "border-color": "#b3b7c4",
@@ -226,14 +264,14 @@
                                 "type": "button",
                                 "text": "Continue",
                                 "style": {
-                                    "size": ["40%", "8.9%"],
+                                    "size": ["40%", "6.85%"],
                                     "background": "#0ea580",
                                     "font": "Segoe-Bold",
-                                    "font-weight": "4.4%",
+                                    "font-weight": "3.333%",
                                     "color": "white",
                                     "border-radius": 3,
                                     "offset": ["right", "right"],
-                                    "margin": ["-7.4%", "-7.4%"],
+                                    "margin": ["-7.4%", "-5.74%"],
                                     "z-index": 30,
                                     "hover": {
                                         "background": "#18BC9C",
@@ -252,7 +290,7 @@
                 "elements": {
                     "loader": {
                         "type": "image",
-                        "path": "client/interfaces/graphic/src/images/loader.png",
+                        "path": "interfaces/graphic/src/images/loader.png",
                         "style": {
                             "size": [50, 50],
                             "offset": ["center", "center"],
@@ -296,22 +334,215 @@
             },
             "battle": {
                 "style": {
-                    "background": "#101B27"
+                    "background": "#1B2837"
                 },
                 "elements": {
-                    "grid": {
-                        "type": "grid",
+                    "container": {
+                        "type": "div",
                         "style": {
-                            "background": "#0C141D",
-                            "color": "#2C3E50",
-                            "cell-size": [35, 35],
+                            "size": [1200, "80%"],
                             "offset": ["center", "center"],
-                            "margin": [0, 0],
-                            "z-index": 10
+                            "background": "#101B27",
+                            "border-radius": 8,
+                            "z-index": 0
+                        },
+                        "elements": {
+                            "grid_container": {
+                                "type": "div",
+                                "style": {
+                                    "size": ["60%", "100%"],
+                                    "offset": ["left", "center"],
+                                    "background": "#101B27",
+                                    "border-radius": 8,
+                                    "z-index": 5
+                                },
+                                "elements": {
+                                    "grid": {
+                                        "type": "grid",
+                                        "style": {
+                                            "background": "#0C141D",
+                                            "color": "#2C3E50",
+                                            "cell-size": [35, 35],
+                                            "offset": ["center", "center"],
+                                            "margin": [0, 0],
+                                            "point-background-0": "#18BC9C",
+                                            "point-background-1": "#EE6677",
+                                            "point-center-color": "#0C141D",
+                                            "point-center-radius": 3,
+                                            "point-cursor": "SYSTEM_CURSOR_HAND",
+                                            "point-radius": 14,
+                                            "z-index": 10
+                                        }
+                                    }
+                                }
+                            },
+                            "panel_container": {
+                                "type": "div",
+                                "style": {
+                                    "size": [420, 600],
+                                    "offset": ["60%", "center"],
+                                    "margin": [20, 0],
+                                    "background": "#101B27",
+                                    "border-radius": 8,
+                                    "z-index": 5
+                                },
+                                "elements": {
+                                    "player_1": {
+                                        "type": "div",
+                                        "style": {
+                                            "size": ["100%", 70],
+                                            "background": "#2c4159",
+                                            "border-radius": 5,
+                                            "offset": ["left",  "left"],
+                                            "margin": [0, 0],
+                                            "z-index": 15
+                                        },
+                                        "elements": {
+                                            "time": {
+                                                "type": "button",
+                                                "text": "04:32",
+                                                "style": {
+                                                    "size": [200, 70],
+                                                    "background": "#1B2837",
+                                                    "color": "white",
+                                                    "font-weight": 50,
+                                                    "font": "Segoe-Regular",
+                                                    "offset": ["left", "left"],
+                                                    "margin": [0, 0],
+                                                    "z-index": 20
+                                                }
+                                            },
+                                            "name": {
+                                                "type": "text",
+                                                "text": "Player 1",
+                                                "style": {
+                                                    "font": "Segoe-Regular",
+                                                    "font-weight": 40,
+                                                    "color": "#d1d4dc",
+                                                    "offset": ["left", "left"],
+                                                    "margin": [220, 4],
+                                                    "z-index": 19
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "player_2": {
+                                        "type": "div",
+                                        "style": {
+                                            "size": ["100%", 70],
+                                            "background": "#2c4159",
+                                            "border-radius": 5,
+                                            "offset": ["left",  "left"],
+                                            "margin": [0, 90],
+                                            "z-index": 15
+                                        },
+                                        "elements": {
+                                            "time": {
+                                                "type": "button",
+                                                "text": "04:32",
+                                                "style": {
+                                                    "size": [200, 70],
+                                                    "background": "#1B2837",
+                                                    "color": "white",
+                                                    "font-weight": 50,
+                                                    "font": "Segoe-Regular",
+                                                    "offset": ["left", "left"],
+                                                    "margin": [0, 0],
+                                                    "z-index": 20
+                                                }
+                                            },
+                                            "name": {
+                                                "type": "text",
+                                                "text": "Player 2",
+                                                "style": {
+                                                    "font": "Segoe-Regular",
+                                                    "font-weight": 40,
+                                                    "color": "#d1d4dc",
+                                                    "offset": ["left", "left"],
+                                                    "margin": [220, 4],
+                                                    "z-index": 19
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "resign": {
+                                        "type": "button",
+                                        "text": "Resign",
+                                        "style": {
+                                            "size": [180, 60],
+                                            "background": "#19242e",
+                                            "font": "Segoe-Bold",
+                                            "font-weight": 23,
+                                            "color": "white",
+                                            "border-radius": 6,
+                                            "offset": ["right", "right"],
+                                            "margin": [0, 0],
+                                            "z-index": 15,
+                                            "display": true,
+                                            "hover": {
+                                                "background": "#2C3E50",
+                                                "cursor": "SYSTEM_CURSOR_HAND"
+                                            }
+                                        }
+                                    },
+                                    "leave": {
+                                        "type": "button",
+                                        "text": "Leave Room",
+                                        "style": {
+                                            "size": [180, 60],
+                                            "background": "#19242e",
+                                            "font": "Segoe-Bold",
+                                            "font-weight": 23,
+                                            "color": "white",
+                                            "border-radius": 6,
+                                            "offset": ["right", "right"],
+                                            "margin": [0, 0],
+                                            "z-index": 15,
+                                            "display": false,
+                                            "hover": {
+                                                "background": "#2C3E50",
+                                                "cursor": "SYSTEM_CURSOR_HAND"
+                                            }
+                                        }
+                                    },
+                                    "text": {
+                                        "type": "text",
+                                        "text": "Opponent has \n resigned",
+                                        "style": {
+                                            "font": "Bloomberg",
+                                            "font-weight": 60,
+                                            "color": "#2C3E50",
+                                            "success-color": "#18BC9C",
+                                            "error-color": "#D63384",
+                                            "message-color": "#2C3E50",
+                                            "offset": ["center", "center"],
+                                            "margin": [0, 20],
+                                            "font-align": "center",
+                                            "z-index": 14
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+    },
+    "logic": {
+        "amount": 5,
+        "size": [15, 15]
+    },
+    "connection": {
+        "protocol": "http",
+        "server": "strangecreator.pythonanywhere.com",
+        "urls": {
+            "make_connection": "/api/make_connection",
+            "get_connection": "/api/get_connection",
+            "get_state": "/api/get_state",
+            "make_move": "/api/make_move",
+            "resign": "/api/resign"
+        },
+        "delay": 0.3
     }
 }

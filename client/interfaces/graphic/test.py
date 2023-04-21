@@ -1,31 +1,20 @@
 class A:
-    class C:
-        @staticmethod
-        def f():
-            print(1)
-
+    @property
+    def field(self):
+        return 1
+    
+    def f(self):
+        return self.g()
+    
     def g(self):
-        # self.__class__.C.f()
-        self.h()
-
-    def h(self):
-        print(1)
-
-
+        return 1
+    
 class B(A):
-    class C:
-        @staticmethod
-        def f():
-            print(2)
-
+    @property
+    def field(self):
+        return 2
+    
     def g(self):
-        # self.__class__.C.f()
-        # super().g()
-        super().h()
-
-    def h(self):
-        print(2)
-
-
-B().g()
-print(isinstance(3, float))
+        return 2
+    
+print(B().f())
