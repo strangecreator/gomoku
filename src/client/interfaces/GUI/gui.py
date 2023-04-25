@@ -242,7 +242,8 @@ if __name__ == "__main__":
                                                     .pages.battle.elements\
                                                     .container.elements\
                                                     .panel_container.elements\
-                                                    .player_1.elements.time.text,
+                                                    .player_1.elements\
+                                                    .time.text,
                                                 lambda document, element: None,
                                                 helper.to_dict(
                                                     config.interface\
@@ -259,7 +260,8 @@ if __name__ == "__main__":
                                                 .name.text,
                                     helper.to_dict(config.interface\
                                         .pages.battle.elements.container\
-                                        .elements.panel_container.elements.player_1\
+                                        .elements.panel_container\
+                                        .elements.player_1\
                                         .elements.name.style)
                                 )
                                     },

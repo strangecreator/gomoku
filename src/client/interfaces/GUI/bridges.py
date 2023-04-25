@@ -286,7 +286,8 @@ class BridgeOnline(Bridge):
             self.make_move(
                 tuple(self.opponent_last_move),
                 request_to_server=False,
-                process_time=False
+                process_time=False,
+                track_anyway=True
             )
             self.track = True
         if self.web_game_state["is_over"]:
@@ -313,11 +314,11 @@ class BridgeOnline(Bridge):
         )
 
     def make_move(self, move: tuple[int, int], request_to_server=True, \
-                   process_time=True) -> None:
+                   process_time=True, track_anyway=False) -> None:
         if self.state.over:
             return
         # if it's not our turn
-        if not self.track:
+        if not self.track and not track_anyway:
             return
         self.state.add(move)
         self.last_move = move
