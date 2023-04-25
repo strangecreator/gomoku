@@ -1,4 +1,6 @@
-import os, sys, argparse
+import os
+import sys
+import argparse
 from pathlib import Path
 
 # base path resolving
@@ -22,6 +24,7 @@ args = parser.parse_args()
 
 # launch the defined interface
 if args.interface == "console":
-    os.system(f'python {BASE_DIR / "client/interfaces/console/console.py"}')
+    path_to_file = BASE_DIR / "client/interfaces/console/console.py"
+    os.system(f'{sys.executable} {path_to_file}')
 elif args.interface == "GUI":
-    os.system(f'python {BASE_DIR / "client/interfaces/GUI/gui.py"}')
+    os.system(f'{sys.executable} {BASE_DIR / "client/interfaces/GUI/gui.py"}')

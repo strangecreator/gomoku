@@ -16,7 +16,7 @@ a = Analysis(
         ('src/client/game_logic/game_logic.py', 'src/client/game_logic'),
         ('dev', 'dev')
     ],
-    hiddenimports=["requests"],
+    hiddenimports=["requests", "pygame"],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

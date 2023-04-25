@@ -28,25 +28,35 @@ class FontsLoader:
 
     def get(self, name: str, font_weight: int) -> pygame.font.Font:
         if (name, font_weight) not in self.cached:
-            self.cached[(name, font_weight)] = pygame.font.Font(BASE_DIR / self.fonts[name], font_weight)
+            self.cached[(name, font_weight)] = pygame.font.Font(
+                BASE_DIR / self.fonts[name],
+                font_weight
+            )
         return self.cached[(name, font_weight)]
 
 
 class StyleProcessor:
     @classmethod
-    def process(cls, window_size: Vector2D, window_offset: Vector2D, style: dict, style_names: list[str]) -> dict:
+    def process(cls, window_size: Vector2D, window_offset: Vector2D, \
+                 style: dict, style_names: list[str]) -> dict:
         for style_name in style_names:
-            style = getattr(cls, style_name)(window_size, window_offset, style)
+            style = getattr(cls, style_name)(
+                window_size,
+                window_offset,
+                style
+            )
         return style
     
     @staticmethod
     def procent(value, max_value: float):
-        if isinstance(value, str) and len(value) > 0 and value[len(value) - 1] == '%':
+        if isinstance(value, str) and len(value) > 0 and \
+              value[len(value) - 1] == '%':
             return (float(value[:len(value) - 1]) * max_value) / 100
         return value
     
     @classmethod
-    def size(cls, window_size: Vector2D, window_offset: Vector2D, style: dict) -> dict:
+    def size(cls, window_size: Vector2D, window_offset: Vector2D, \
+              style: dict) -> dict:
         size = style.get("size", [0, 0])
         style["processed"]["size"] = [
             round(cls.procent(size[0], window_size.x)),
@@ -55,7 +65,8 @@ class StyleProcessor:
         return style
     
     @classmethod
-    def margin(cls, window_size: Vector2D, window_offset: Vector2D, style: dict) -> dict:
+    def margin(cls, window_size: Vector2D, window_offset: Vector2D, \
+                style: dict) -> dict:
         margin = style.get("margin", [0, 0])
         style["processed"]["margin"] = [
             round(cls.procent(margin[0], window_size.x)),
@@ -64,7 +75,8 @@ class StyleProcessor:
         return style
 
     @classmethod
-    def offset(cls, window_size: Vector2D, window_offset: Vector2D, style: dict) -> dict:
+    def offset(cls, window_size: Vector2D, window_offset: Vector2D, \
+                style: dict) -> dict:
         offset = style.get("offset", [0, 0])
         offset = [
             cls.procent(offset[0], window_size.x),
@@ -87,7 +99,8 @@ class StyleProcessor:
         return style
     
     @classmethod
-    def font_offset(cls, window_size: Vector2D, window_offset: Vector2D, style: dict) -> dict:
+    def font_offset(cls, window_size: Vector2D, window_offset: Vector2D, \
+                     style: dict) -> dict:
         offset = style["processed"]["offset"]
         font_size = style["processed"]["font-size"]
         size = style["processed"]["size"]
@@ -98,9 +111,12 @@ class StyleProcessor:
         return style
     
     @classmethod
-    def font_weight(cls, window_size: Vector2D, window_offset: Vector2D, style: dict) -> dict:
+    def font_weight(cls, window_size: Vector2D, window_offset: Vector2D, \
+                     style: dict) -> dict:
         font_weight = style.get("font-weight", 0)
-        style["processed"]["font-weight"] = round(cls.procent(font_weight, window_size.y))
+        style["processed"]["font-weight"] = round(
+            cls.procent(font_weight, window_size.y)
+        )
         return style
 
 
@@ -131,7 +147,8 @@ class Element:
     def make_reference(self, page_controller: PageController) -> None:
         self.document = page_controller
 
-    def update_bounds(self, window_size: Vector2D, window_offset: Vector2D) -> None:
+    def update_bounds(self, window_size: Vector2D, \
+                       window_offset: Vector2D) -> None:
         self.window_size = window_size
         self.window_offset = window_offset
 
@@ -146,7 +163,8 @@ class Element:
         return False
 
     def is_point_in(self, point: Vector2D) -> bool:
-        return self.rect.x1 <= point.x <= self.rect.x2 and self.rect.y1 <= point.y <= self.rect.y2
+        return self.rect.x1 <= point.x <= self.rect.x2 and \
+              self.rect.y1 <= point.y <= self.rect.y2
     
 class StyledElement(Element):
     class StyleProcessor(StyleProcessor): pass
@@ -186,7 +204,8 @@ class StyledElement(Element):
 class Div(StyledElement):
     class StyleProcessor(StyleProcessor): pass
 
-    def __init__(self, elements: dict[str, StyledElement], *args, **kwargs) -> None:
+    def __init__(self, elements: dict[str, StyledElement], \
+                  *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.elements = elements
         self.is_hover = False
@@ -196,14 +215,20 @@ class Div(StyledElement):
         self.process_styles(["size", "margin", "offset"])
         self.rect = Rect(
             Vector2D(*self.get_style("offset")),
-            Vector2D(*self.get_style("offset")) + Vector2D(*self.get_style("size"))
+            Vector2D(*self.get_style("offset")) + \
+                  Vector2D(*self.get_style("size"))
         )
         # create a blending surface (for rounded borders and transparency)
         self.original_image = pygame.Surface(self.get_style("size"))
         self.original_image.set_alpha(self.get_style("alpha", 256))
-        self.original_image.fill(pygame.color.Color(self.get_style("background", "black")))
+        self.original_image.fill(
+            pygame.color.Color(self.get_style("background", "black"))
+        )
 
-        self.rect_image = pygame.Surface(self.original_image.get_size(), pygame.SRCALPHA)
+        self.rect_image = pygame.Surface(
+            self.original_image.get_size(),
+            pygame.SRCALPHA
+        )
         pygame.draw.rect(
             self.rect_image,
             (255, 255, 255),
@@ -212,11 +237,17 @@ class Div(StyledElement):
         )
 
         self.image_for_render = self.original_image.copy().convert_alpha()
-        self.image_for_render.blit(self.rect_image, (0, 0), None, pygame.BLEND_RGBA_MIN)
+        self.image_for_render.blit(
+            self.rect_image,
+            (0, 0),
+            None,
+            pygame.BLEND_RGBA_MIN
+        )
         # update chidren
         self.elements_update_bounds()
 
-    def update_bounds(self, window_size: Vector2D, window_offset: Vector2D) -> None:
+    def update_bounds(self, window_size: Vector2D, \
+                       window_offset: Vector2D) -> None:
         super().update_bounds(window_size, window_offset)
         self.update_style()
         self.elements_update_bounds()
@@ -237,7 +268,8 @@ class Div(StyledElement):
         if already_caught or not self.get_style("display", True):
             return False
         result = False
-        for element in sorted(self.elements.values(), key=lambda element: element.z_index, reverse=True):
+        for element in sorted(self.elements.values(), \
+                    key=lambda element: element.z_index, reverse=True):
             result |= element.check_state(result)
         pos = pygame.mouse.get_pos()
         if self.is_point_in(Vector2D(*pos)):
@@ -252,15 +284,20 @@ class Div(StyledElement):
         if not self.get_style("display", True):
             return
         # render to the surface
-        self.surface.blit(self.image_for_render, self.get_style("offset", [0, 0]))
+        self.surface.blit(
+            self.image_for_render,
+            self.get_style("offset", [0, 0])
+        )
         # render other elements
-        for element in sorted(self.elements.values(), key=lambda element: element.z_index):
+        for element in sorted(self.elements.values(), \
+                               key=lambda element: element.z_index):
             element.render()
 
     def handle_event(self, event: pygame.event.Event) -> bool:
         if not self.get_style("display", True):
             return False
-        for element in sorted(self.elements.values(), key=lambda element: element.z_index, reverse=True):
+        for element in sorted(self.elements.values(), \
+                 key=lambda element: element.z_index, reverse=True):
             if element.handle_event(event):
                 return True
         pos = pygame.mouse.get_pos()
@@ -284,7 +321,9 @@ class Div(StyledElement):
 class Button(StyledElement):
     class StyleProcessor(StyleProcessor): pass
 
-    def __init__(self, text: str, on_click: Callable[[PageController, Element], None], *args, **kwargs) -> None:
+    def __init__(self, text: str, \
+            on_click: Callable[[PageController, Element], None], \
+                *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._text = text
         self.on_click = on_click
@@ -302,20 +341,27 @@ class Button(StyledElement):
         super().update_style()
         self.process_styles(["size", "margin", "offset", "font_weight"])
         if self.fonts_loader is not None:
-            self.text_surface = self.fonts_loader.get(self.get_style("font"), self.get_style("font-weight")).render(
+            self.text_surface = self.fonts_loader.get(
+                self.get_style("font"),
+                self.get_style("font-weight")
+            ).render(
                 self.text,
                 True,
                 pygame.color.Color(self.style.get("color", "white"))
             )
-            self.style["processed"]["font-size"] = list(self.text_surface.get_size())
+            self.style["processed"]["font-size"] = list(
+                self.text_surface.get_size()
+            )
             self.process_styles(["font_offset"])
         # create a rectangle
         self.rect = Rect(
             Vector2D(*self.get_style("offset")),
-            Vector2D(*self.get_style("offset")) + Vector2D(*self.get_style("size"))
+            Vector2D(*self.get_style("offset")) + \
+                  Vector2D(*self.get_style("size"))
         )
 
-    def update_bounds(self, window_size: Vector2D, window_offset: Vector2D) -> None:
+    def update_bounds(self, window_size: Vector2D, \
+                       window_offset: Vector2D) -> None:
         super().update_bounds(window_size, window_offset)
         self.update_style()
 
@@ -332,7 +378,10 @@ class Button(StyledElement):
             if not self.is_hover:
                 self.is_hover = True
                 pygame.mouse.set_cursor(
-                    getattr(pygame, self.get_style("cursor", "SYSTEM_CURSOR_ARROW"))
+                    getattr(
+                        pygame,
+                        self.get_style("cursor", "SYSTEM_CURSOR_ARROW")
+                    )
                 )
             return True
         else:
@@ -397,12 +446,16 @@ class Image(StyledElement):
         self.process_styles(["size", "margin", "offset"])
         self.rect = Rect(
             Vector2D(*self.get_style("offset")),
-            Vector2D(*self.get_style("offset")) + Vector2D(*self.get_style("size"))
+            Vector2D(*self.get_style("offset")) + \
+                Vector2D(*self.get_style("size"))
         )
         self.image_surface = pygame.image.load(self.path)
-        self.image_rect = self.image_surface.get_rect(topleft=self.get_style("offset"))
+        self.image_rect = self.image_surface.get_rect(
+            topleft=self.get_style("offset")
+        )
     
-    def update_bounds(self, window_size: Vector2D, window_offset: Vector2D) -> None:
+    def update_bounds(self, window_size: Vector2D, \
+                       window_offset: Vector2D) -> None:
         super().update_bounds(window_size, window_offset)
         self.update_style()
 
@@ -412,8 +465,13 @@ class Image(StyledElement):
             return
         period: int = self.get_style("rotation-period", None)
         if period is not None:
-            image_surface = pygame.transform.rotate(self.image_surface, self.angle)
-            image_rect = image_surface.get_rect(center=self.image_rect.center)
+            image_surface = pygame.transform.rotate(
+                self.image_surface,
+                self.angle
+            )
+            image_rect = image_surface.get_rect(
+                center=self.image_rect.center
+            )
             self.surface.blit(image_surface, image_rect)
             self.angle -= 360 // (period * self.document.fps)
         else:
@@ -441,23 +499,38 @@ class Text(StyledElement):
         if self.fonts_loader is not None:
             self.text_surface = []
             for line in self.text.split('\n'):
-                self.text_surface.append(self.fonts_loader.get(self.get_style("font"), self.get_style("font-weight")).render(
-                    line,
-                    True,
-                    pygame.color.Color(self.get_style("color", "white"))
-                ))
+                self.text_surface.append(
+                    self.fonts_loader.get(
+                        self.get_style("font"),
+                        self.get_style("font-weight")
+                    ).render(
+                        line,
+                        True,
+                        pygame.color.Color(self.get_style("color", "white"))
+                    )
+                )
             self.style["processed"]["font-size"] = [
-                max(map(lambda surface: surface.get_size()[0], self.text_surface)),
-                sum(map(lambda surface: surface.get_size()[1], self.text_surface))
+                max(map(
+                    lambda surface: surface.get_size()[0],
+                    self.text_surface
+                )),
+                sum(map(
+                    lambda surface: surface.get_size()[1],
+                    self.text_surface
+                ))
             ]
-            self.style["processed"]["size"] = self.style["processed"]["font-size"]
+            self.style["processed"]["size"] = self.style[
+                "processed"
+            ]["font-size"]
             self.process_styles(["margin", "offset", "font_offset"])
             self.rect = Rect(
                 Vector2D(*self.get_style("offset")),
-                Vector2D(*self.get_style("offset")) + Vector2D(*self.get_style("size"))
+                Vector2D(*self.get_style("offset")) + \
+                      Vector2D(*self.get_style("size"))
             )
     
-    def update_bounds(self, window_size: Vector2D, window_offset: Vector2D) -> None:
+    def update_bounds(self, window_size: Vector2D, \
+                      window_offset: Vector2D) -> None:
         super().update_bounds(window_size, window_offset)
         self.update_style()
 
@@ -481,7 +554,8 @@ class Text(StyledElement):
                 )
             elif align == "center":
                 current_offset = (
-                    current_offset[0] + (size[0] - surface.get_size()[0]) // 2,
+                    current_offset[0] + \
+                          (size[0] - surface.get_size()[0]) // 2,
                     current_offset[1] + i * surface.get_size()[1]
                 )
             else: # align == left
@@ -502,14 +576,20 @@ class Grid(StyledElement):
 
     def update_style(self) -> None:
         super().update_style()
-        self.style["processed"]["size"] = list(self.size * Vector2D(*self.get_style("cell-size", [0, 0])) + Vector2D(1, 1))
+        self.style["processed"]["size"] = list(
+            self.size * Vector2D(
+                *self.get_style("cell-size", [0, 0])
+            ) + Vector2D(1, 1)
+        )
         self.process_styles(["margin", "offset"])
         self.rect = Rect(
             Vector2D(*self.get_style("offset")),
-            Vector2D(*self.get_style("offset")) + Vector2D(*self.get_style("size"))
+            Vector2D(*self.get_style("offset")) + \
+            Vector2D(*self.get_style("size"))
         )
     
-    def update_bounds(self, window_size: Vector2D, window_offset: Vector2D) -> None:
+    def update_bounds(self, window_size: Vector2D, \
+                       window_offset: Vector2D) -> None:
         super().update_bounds(window_size, window_offset)
         self.update_style()
 
@@ -570,7 +650,8 @@ class Grid(StyledElement):
         # draw the grid
         # horizontal lines
         for i in range(self.size[0] + 1):
-            offset = Vector2D(*self.get_style("offset")) + Vector2D(i * self.style["cell-size"][0], 0)
+            offset = Vector2D(*self.get_style("offset")) + \
+                  Vector2D(i * self.style["cell-size"][0], 0)
             pygame.draw.rect(
                 self.surface,
                 pygame.color.Color(
@@ -583,7 +664,8 @@ class Grid(StyledElement):
             )
         # vertical lines
         for i in range(self.size[1] + 1):
-            offset = Vector2D(*self.get_style("offset")) + Vector2D(0, i * self.style["cell-size"][1])
+            offset = Vector2D(*self.get_style("offset")) + \
+                  Vector2D(0, i * self.style["cell-size"][1])
             pygame.draw.rect(
                 self.surface,
                 pygame.color.Color(
@@ -601,12 +683,20 @@ class Grid(StyledElement):
     def render_moves(self):
         moves_handler = self.document.bridge_connector.get_moves()
         for move in moves_handler.moves[0]:
-            self.render_move(move, self.style[f"point-background-{moves_handler.color[0]}"], self.style["point-radius"])
+            self.render_move(move, self.style[
+                f"point-background-{moves_handler.color[0]}"
+            ], self.style["point-radius"])
         for move in moves_handler.moves[1]:
-            self.render_move(move, self.style[f"point-background-{moves_handler.color[1]}"], self.style["point-radius"])
+            self.render_move(move, self.style[
+                f"point-background-{moves_handler.color[1]}"
+            ], self.style["point-radius"])
         last_move = self.document.bridge_connector.get_last_move()
         if last_move is not None:
-            self.render_move(last_move, self.style["point-center-color"], self.style["point-center-radius"])
+            self.render_move(
+                last_move,
+                self.style["point-center-color"],
+                self.style["point-center-radius"]
+            )
 
     def render_expected_move(self) -> None:
         if not self.is_hover:
@@ -618,11 +708,17 @@ class Grid(StyledElement):
         if move is None:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
             return
-        pygame.mouse.set_cursor(getattr(pygame, self.get_style("point-cursor", "SYSTEM_CURSOR_ARROW")))
-        color = self.style[f"point-background-{self.document.bridge_connector.track_color}"]
+        pygame.mouse.set_cursor(getattr(
+            pygame,
+            self.get_style("point-cursor", "SYSTEM_CURSOR_ARROW")
+        ))
+        color = self.style[
+            f"point-background-{self.document.bridge_connector.track_color}"
+        ]
         self.render_move(move, color, self.style["point-radius"])
 
-    def render_move(self, move: tuple[int, int], color: str, point_radius) -> None:
+    def render_move(self, move: tuple[int, int], \
+                    color: str, point_radius) -> None:
         cell_size = Vector2D(*self.get_style("cell-size", [0, 0]))
         pygame.draw.circle(
             self.surface,
@@ -636,7 +732,8 @@ class Grid(StyledElement):
 class InputInteger(StyledElement):
     class StyleProcessor(StyleProcessor):
         @classmethod
-        def font_margin(cls, window_size: Vector2D, window_offset: Vector2D, style: dict) -> dict:
+        def font_margin(cls, window_size: Vector2D, \
+                         window_offset: Vector2D, style: dict) -> dict:
             window_size = Vector2D(*style["processed"]["size"])
             window_offset = Vector2D(*style["processed"]["offset"])
             margin = style.get("font-margin", [0, 0])
@@ -647,7 +744,8 @@ class InputInteger(StyledElement):
             return style
 
         @classmethod
-        def font_offset(cls, window_size: Vector2D, window_offset: Vector2D, style: dict) -> dict:
+        def font_offset(cls, window_size: Vector2D, \
+                         window_offset: Vector2D, style: dict) -> dict:
             window_size = Vector2D(*style["processed"]["size"])
             window_offset = Vector2D(*style["processed"]["offset"])
             offset = style.get("font-offset", [0, 0])
@@ -671,7 +769,8 @@ class InputInteger(StyledElement):
             style["processed"]["font-offset"] = result
             return style
 
-    def __init__(self, value: int, min_value: int, max_value: int, *args, **kwargs) -> None:
+    def __init__(self, value: int, min_value: int, max_value: int, \
+                  *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._value = value
         self.min_value = min_value
@@ -690,20 +789,27 @@ class InputInteger(StyledElement):
         super().update_style()
         self.process_styles(["size", "margin", "offset", "font_weight"])
         if self.fonts_loader is not None:
-            self.text_surface = self.fonts_loader.get(self.get_style("font"), self.get_style("font-weight")).render(
+            self.text_surface = self.fonts_loader.get(
+                self.get_style("font"),
+                self.get_style("font-weight")
+            ).render(
                 str(self.value),
                 True,
                 pygame.color.Color(self.style.get("color", "white"))
             )
-            self.style["processed"]["font-size"] = list(self.text_surface.get_size())
+            self.style["processed"]["font-size"] = list(
+                self.text_surface.get_size()
+            )
             self.process_styles(["font_margin", "font_offset"])
         # create a rectangle
         self.rect = Rect(
             Vector2D(*self.get_style("offset")),
-            Vector2D(*self.get_style("offset")) + Vector2D(*self.get_style("size"))
+            Vector2D(*self.get_style("offset")) + \
+                  Vector2D(*self.get_style("size"))
         )
 
-    def update_bounds(self, window_size: Vector2D, window_offset: Vector2D) -> None:
+    def update_bounds(self, window_size: Vector2D, \
+                       window_offset: Vector2D) -> None:
         super().update_bounds(window_size, window_offset)
         self.update_style()
 
@@ -720,7 +826,10 @@ class InputInteger(StyledElement):
             if not self.is_hover:
                 self.is_hover = True
                 pygame.mouse.set_cursor(
-                    getattr(pygame, self.get_style("cursor", "SYSTEM_CURSOR_ARROW"))
+                    getattr(
+                        pygame,
+                        self.get_style("cursor", "SYSTEM_CURSOR_ARROW")
+                    )
                 )
             return True
         else:
@@ -766,7 +875,9 @@ class InputInteger(StyledElement):
     def handle_event(self, event: pygame.event.Event) -> bool:
         if not self.get_style("display", True):
             return False
-        if event.type == pygame.MOUSEWHEEL and self.is_point_in(Vector2D(*pygame.mouse.get_pos())):
+        if event.type == pygame.MOUSEWHEEL and self.is_point_in(
+            Vector2D(*pygame.mouse.get_pos())
+        ):
             if event.y < 0:
                 self.value = max(self.min_value, self.value - 1)
             elif event.y > 0:
@@ -816,7 +927,8 @@ class Animation(object):
 
 
 class Window:
-    def __init__(self, size: Vector2D, offset: Vector2D, elements: dict[str, Element], z_index: int = 0) -> None:
+    def __init__(self, size: Vector2D, offset: Vector2D, \
+                  elements: dict[str, Element], z_index: int = 0) -> None:
         self.size = size
         self.offset = offset
         self.elements = elements
@@ -839,17 +951,20 @@ class Window:
             element.make_reference(page_controller)
 
     def render(self) -> None:
-        for element in sorted(self.elements.values(), key=lambda element: element.z_index): # TODO
+        for element in sorted(self.elements.values(), \
+                 key=lambda element: element.z_index): # TODO
             element.render()
         
     def check_state(self, already_caught=False) -> bool:
         result = False
-        for element in sorted(self.elements.values(), key=lambda element: element.z_index, reverse=True):
+        for element in sorted(self.elements.values(), \
+                 key=lambda element: element.z_index, reverse=True):
             result |= element.check_state(result)
         return result
 
     def handle_event(self, event: pygame.event.Event) -> bool:
-        for element in sorted(self.elements.values(), key=lambda element: element.z_index, reverse=True):
+        for element in sorted(self.elements.values(), \
+                 key=lambda element: element.z_index, reverse=True):
             if element.handle_event(event):
                 return True
         return False
@@ -863,7 +978,8 @@ class Window:
 
 
 class Page:
-    def __init__(self, background: pygame.Color, windows: dict[str, Window]) -> None:
+    def __init__(self, background: pygame.Color, \
+                  windows: dict[str, Window]) -> None:
         self.background = background
         self.windows =  windows
         self.surface = None
@@ -882,17 +998,20 @@ class Page:
             window.make_reference(page_controller)
 
     def render(self) -> None:
-        for window in sorted(self.windows.values(), key=lambda window: window.z_index): # TODO
+        for window in sorted(self.windows.values(), \
+             key=lambda window: window.z_index): # TODO
             window.render()
 
     def check_state(self) -> bool:
         result = False
-        for window in sorted(self.windows.values(), key=lambda window: window.z_index, reverse=True):
+        for window in sorted(self.windows.values(), \
+             key=lambda window: window.z_index, reverse=True):
             result |= window.check_state(result)
         return result
 
     def handle_event(self, event: pygame.event.Event) -> None:
-        for window in sorted(self.windows.values(), key=lambda window: window.z_index, reverse=True):
+        for window in sorted(self.windows.values(), \
+                 key=lambda window: window.z_index, reverse=True):
             if window.handle_event(event):
                 break
 
@@ -901,7 +1020,8 @@ class Page:
 
 
 class PageController(object):
-    def __init__(self, pages: dict[str, Page], current_page: str, fps: int) -> None:
+    def __init__(self, pages: dict[str, Page], \
+                  current_page: str, fps: int) -> None:
         self.pages = pages
         self._current_page = current_page
         self.fps = fps
@@ -950,14 +1070,24 @@ class PageController(object):
         return self.get_page(self.current_page)
     
 
-def apply_initial_configuration_before(config, window_size: Vector2D) -> None:
+def apply_initial_configuration_before(config, \
+                     window_size: Vector2D) -> None:
     # calculate limit values for anteroom form
-    cell_size = Vector2D(*getattr(config.interface.pages.battle.elements.container.elements.grid_container.elements.grid.style, "cell-size"))
+    cell_size = Vector2D(*getattr(config.interface.pages.battle \
+        .elements.container.elements.grid_container.elements \
+            .grid.style, "cell-size"))
     # horizontal axis
-    container_horizontal_size = config.interface.pages.battle.elements.container.style.size[0]
-    config.interface.pages.anteroom.elements.form.elements.input_field_1.max_value = int((container_horizontal_size * 0.6 - 20 * 2) / cell_size.y) - 1
+    container_horizontal_size = config.interface.pages.battle.elements \
+        .container.style.size[0]
+    config.interface.pages.anteroom.elements.form.elements \
+        .input_field_1.max_value = int(
+        (container_horizontal_size * 0.6 - 20 * 2) / cell_size.y
+    ) - 1
     # vertical axis
-    config.interface.pages.anteroom.elements.form.elements.input_field_2.max_value = int((window_size.y * 0.8 - 20 * 2) / cell_size.y) - 1
+    config.interface.pages.anteroom.elements.form.elements \
+        .input_field_2.max_value = int(
+        (window_size.y * 0.8 - 20 * 2) / cell_size.y
+    ) - 1
 
 def apply_initial_configuration_after(document: PageController) -> None:
     pass

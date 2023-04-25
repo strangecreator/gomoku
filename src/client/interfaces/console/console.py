@@ -19,7 +19,7 @@ class ConsoleOfflineInterface:
 
     # ----------------------- public methods
     def __init__(self) -> None:
-        self.state = State(5, (0, 0)) # classic gomoku
+        self.state = State(5, (0, 0))  # classic gomoku
         self.borders = None
         self.offset = 0
 
@@ -27,7 +27,12 @@ class ConsoleOfflineInterface:
         # configuration
         self.state = State(
             int(input("Amount chips in a row to win: ")),
-            tuple(map(int, input("Field size, 0 represents unlimited field by this axis: ").split()))
+            tuple(map(
+                int,
+                input(
+                    "Field size, 0 represents unlimited field by this axis: "
+                ).split()
+            ))
         )
 
     def play(self) -> None:
@@ -35,7 +40,10 @@ class ConsoleOfflineInterface:
             raise NotImplementedError("Game is over!")
         self.print_field()
         while not self.state.over:
-            move = tuple(map(int, input(f"Player {self.state.turn + 1} to move: ").split()))
+            move = tuple(map(
+                int,
+                input(f"Player {self.state.turn + 1} to move: ").split()
+            ))
             self.offset += 1
             try:
                 self.state.add(move)
@@ -46,7 +54,9 @@ class ConsoleOfflineInterface:
         if self.state.draw:
             print("The game is a draw! Congratulations!")
         else:
-            print(f"Player {(self.state.turn ^ 1) + 1} has won! Congratulations!")
+            print(
+                f"Player {(self.state.turn ^ 1) + 1} has won! Congratulations!"
+            )
 
     def print_field(self) -> None:
         self._clear_screen()
@@ -76,17 +86,20 @@ class ConsoleOfflineInterface:
         vertical = [1, self.state.h]
         if self.state.h == 0:
             vertical = [
-                min(self.state.moves[0] | self.state.moves[1] | {(0, 0)}, key=lambda move: move[1])[1],
-                max(self.state.moves[0] | self.state.moves[1] | {(0, 0)}, key=lambda move: move[1])[1]
+                min(self.state.moves[0] | self.state.moves[1] | {(0, 0)},
+                    key=lambda move: move[1])[1],
+                max(self.state.moves[0] | self.state.moves[1] | {(0, 0)},
+                    key=lambda move: move[1])[1]
             ]
         return (tuple(horizontal), tuple(vertical))
-    
+
     def _clear_screen(self):
         if self.borders is None:
             return
-        print(f"\033[{self.borders[1][1] - self.borders[1][0] + 1 + self.offset}F\033[0J", end='')
+        f_string_value = self.borders[1][1] - self.borders[1][0] + 1 + \
+        self.offset
+        print(f"\033[{f_string_value}F\033[0J", end='')
         self.offset = 0
-        
 
 
 if __name__ == "__main__":

@@ -1,14 +1,33 @@
 # Gomoku Online/Offline
 
+## History
+> Gomoku, also called "Five in a Row", is an abstract strategy board game. It is traditionally played with Go pieces (black and white stones) on a Go board. It is played using a 15×15 board while in the past a 19×19 board was standard. Because pieces are typically not moved or removed from the board, gomoku may also be played as a paper-and-pencil game. The game is known in several countries under different names.
+*From Wikipedia*
+
+## Rules
+> Players alternate turns placing a stone of their color on an empty intersection. Black plays first. The winner is the first player to form an unbroken line of five stones of their color horizontally, vertically, or diagonally. In some rules, this line must be exactly five stones long; six or more stones in a row does not count as a win, and is called an overline. If the board is completely filled and no one can make a line of 5 stones, then it will result in a draw.
+*From Wikipedia*
+
 ## Installation
+The minimum supported version of python is 3.9.
+
+In the following commands, you need to substitute your python 
+executable path instead of \<python\>
+
 Firstly clone this repository to your computer:
 ```bash
 git clone https://github.com/strangecreator/gomoku
 cd gomoku
 ```
+You need to install required modules:
+
+```bash
+pip install -r requirements.txt
+```
+
 And then, run main.py in **src** folder with --interface parameter *[console, GUI]*:
 ```bash
-python src/main.py --interface=GUI
+<python> src/main.py --interface=GUI
 ```
 
 But you can also just run binaries. 
@@ -30,14 +49,6 @@ Players take turns placing pieces to win.
 If you want to play online, press *Play Online* button and as you can see you are on the waiting page:
 ![Waiting Room](pictures/waiting_room.png)
 After, you will be redirected to the *battle* page to play with somebody via net.
-
-## History
-> Gomoku, also called "Five in a Row", is an abstract strategy board game. It is traditionally played with Go pieces (black and white stones) on a Go board. It is played using a 15×15 board while in the past a 19×19 board was standard. Because pieces are typically not moved or removed from the board, gomoku may also be played as a paper-and-pencil game. The game is known in several countries under different names.
-*From Wikipedia*
-
-## Rules
-> Players alternate turns placing a stone of their color on an empty intersection. Black plays first. The winner is the first player to form an unbroken line of five stones of their color horizontally, vertically, or diagonally. In some rules, this line must be exactly five stones long; six or more stones in a row does not count as a win, and is called an overline. If the board is completely filled and no one can make a line of 5 stones, then it will result in a draw.
-*From Wikipedia*
 
 ## License
 

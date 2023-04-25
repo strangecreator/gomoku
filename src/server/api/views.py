@@ -46,11 +46,23 @@ def make_connection(request) -> JsonResponse:
         opponent_id = cache.get(settings.CACHE_USER_IN_QUEUE_NAME)
         if opponent_id is not None and opponent_id != user_id:
             # get the first competitor
-            cache.set(settings.CACHE_USER_IN_QUEUE_NAME, None, settings.CACHE_USER_IN_QUEUE_TIMEOUT)
+            cache.set(
+                settings.CACHE_USER_IN_QUEUE_NAME,
+                None,
+                settings.CACHE_USER_IN_QUEUE_TIMEOUT
+            )
             # creates game session
             game_id = str(uuid.uuid4())
-            cache.set(f'{settings.CACHE_USER_TO_GAME_PREFIX}-{user_id}', game_id, settings.GAME_DURATION_TIMEOUT)
-            cache.set(f'{settings.CACHE_USER_TO_GAME_PREFIX}-{opponent_id}', game_id, settings.GAME_DURATION_TIMEOUT)
+            cache.set(
+                f'{settings.CACHE_USER_TO_GAME_PREFIX}-{user_id}',
+                game_id,
+                settings.GAME_DURATION_TIMEOUT
+            )
+            cache.set(
+                f'{settings.CACHE_USER_TO_GAME_PREFIX}-{opponent_id}',
+                game_id,
+                settings.GAME_DURATION_TIMEOUT
+            )
             # creating game state
             cache.set(f'{settings.CACHE_GAME_STATE_PREFIX}-{game_id}', {
                 "players": [user_id, opponent_id],
@@ -77,7 +89,11 @@ def make_connection(request) -> JsonResponse:
                 }
             })
         else:
-            cache.set(settings.CACHE_USER_IN_QUEUE_NAME, user_id, settings.CACHE_USER_IN_QUEUE_TIMEOUT)
+            cache.set(
+                settings.CACHE_USER_IN_QUEUE_NAME,
+                user_id,
+                settings.CACHE_USER_IN_QUEUE_TIMEOUT
+            )
             return JsonResponse({
                 "status": True,
                 "data": {
@@ -112,7 +128,11 @@ def get_connection(request) -> JsonResponse:
             })
         else:
             if cache.get(settings.CACHE_USER_IN_QUEUE_NAME) == user_id:
-                cache.set(settings.CACHE_USER_IN_QUEUE_NAME, user_id, settings.CACHE_USER_IN_QUEUE_TIMEOUT)
+                cache.set(
+                    settings.CACHE_USER_IN_QUEUE_NAME,
+                    user_id,
+                    settings.CACHE_USER_IN_QUEUE_TIMEOUT
+                )
             else:
                 return JsonResponse({
                 "status": True,
@@ -183,7 +203,8 @@ def make_move(request) -> JsonResponse:
         cache.set(
             f'{settings.CACHE_GAME_STATE_PREFIX}-{game_id}',
             state,
-            settings.GAME_DURATION_TIMEOUT - (time.time() - int(state["time_start"]))
+            settings.GAME_DURATION_TIMEOUT - \
+            (time.time() - int(state["time_start"]))
         )
         return JsonResponse({
             "status": True,
@@ -258,7 +279,8 @@ def resign(request) -> JsonResponse:
         cache.set(
             f'{settings.CACHE_GAME_STATE_PREFIX}-{game_id}',
             state,
-            settings.GAME_DURATION_TIMEOUT - (time.time() - int(state["time_start"]))
+            settings.GAME_DURATION_TIMEOUT - \
+            (time.time() - int(state["time_start"]))
         )
         return JsonResponse({
             "status": True

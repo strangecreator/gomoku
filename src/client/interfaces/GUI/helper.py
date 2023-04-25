@@ -5,7 +5,8 @@ from dataclasses import dataclass
 def to_dict(obj: SimpleNamespace) -> dict:
     result = {}
     for name, value in vars(obj).items():
-        result[name] = value if not isinstance(value, SimpleNamespace) else to_dict(value)
+        result[name] = value if not isinstance(value, SimpleNamespace) \
+            else to_dict(value)
     return result
 
 
@@ -20,16 +21,16 @@ class Vector2D:
 
     def __getitem__(self, index):
         return self.x if index == 0 else self.y
-    
+
     def __add__(self, vector):
         return Vector2D(self.x + vector.x, self.y + vector.y)
-    
+
     def __sub__(self, vector):
         return Vector2D(self.x - vector.x, self.y - vector.y)
-    
+
     def __mul__(self, vector):
         return Vector2D(self.x * vector.x, self.y * vector.y)
-    
+
     def __floordiv__(self, obj):
         if isinstance(obj, int):
             return Vector2D(self.x // obj, self.y // obj)
@@ -37,6 +38,7 @@ class Vector2D:
             return Vector2D(self.x // obj.x, self.y // obj.y)
         else:
             raise NotImplementedError
+
 
 @dataclass
 class Rect:
@@ -50,15 +52,15 @@ class Rect:
     @property
     def x1(self) -> int:
         return self.p1.x
-    
+
     @property
     def x2(self) -> int:
         return self.p2.x
-    
+
     @property
     def y1(self) -> int:
         return self.p1.y
-    
+
     @property
     def y2(self) -> int:
         return self.p2.y

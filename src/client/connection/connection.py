@@ -1,3 +1,7 @@
+import time
+import requests
+import urllib.parse
+from dataclasses import dataclass
 import sys
 from pathlib import Path
 
@@ -6,10 +10,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
 
 from config_loader import *
-
-import requests, json, time
-from dataclasses import dataclass
-import urllib.parse
 
 
 class Connection:
@@ -28,7 +28,8 @@ class Connection:
     def make_connection(self, call_back, *args, **kwargs) -> None:
         # initial request
         response = Connection.DefaultResponse()
-        while not self.closed and (response.status_code != 200 or not response.json()["status"]):
+        while not self.closed and (
+                response.status_code != 200 or not response.json()["status"]):
             try:
                 response = requests.get(
                     self._get_url(
@@ -48,9 +49,9 @@ class Connection:
     def get_connection(self, call_back, *args, **kwargs) -> None:
         response = Connection.DefaultResponse()
         # getting game_id
-        while not self.closed and (response.status_code != 200 or 
-               not response.json()["status"] or 
-               response.json()["data"]["game_id"] is None):
+        while not self.closed and (response.status_code != 200 or
+                                   not response.json()["status"] or
+                                   response.json()["data"]["game_id"] is None):
             try:
                 response = requests.get(
                     self._get_url(
@@ -60,9 +61,9 @@ class Connection:
                         }
                     )
                 )
-                if (response.status_code == 200 and 
-                    response.json()["status"] and 
-                    response.json()["reconnection_required"]):
+                if (response.status_code == 200 and
+                    response.json()["status"] and
+                        response.json()["reconnection_required"]):
                     return self.make_connection(call_back)
             except:
                 time.sleep(config.connection.delay)
@@ -71,9 +72,12 @@ class Connection:
         self.game_id = response.json()["data"]["game_id"]
         self.get_state(call_back, *args, **kwargs)
 
-    def make_move(self, move: tuple[int, int], call_back, *args, **kwargs) -> None:
+    def make_move(
+            self, move: tuple[int, int],
+            call_back, *args, **kwargs) -> None:
         response = Connection.DefaultResponse()
-        while not self.closed and (response.status_code != 200 or not response.json()["status"]):
+        while not self.closed and (
+                response.status_code != 200 or not response.json()["status"]):
             try:
                 response = requests.post(
                     self._get_url(
@@ -92,10 +96,11 @@ class Connection:
         if self.closed:
             return
         call_back(response.json()["data"], *args, **kwargs)
-        
+
     def get_state(self, call_back, *args, **kwargs) -> None:
         response = Connection.DefaultResponse()
-        while not self.closed and (response.status_code != 200 or not response.json()["status"]):
+        while not self.closed and (
+                response.status_code != 200 or not response.json()["status"]):
             try:
                 response = requests.get(
                     self._get_url(
@@ -119,7 +124,8 @@ class Connection:
 
     def resign(self, call_back, *args, **kwargs) -> None:
         response = Connection.DefaultResponse()
-        while not self.closed and (response.status_code != 200 or not response.json()["status"]):
+        while not self.closed and (
+                response.status_code != 200 or not response.json()["status"]):
             try:
                 response = requests.post(
                     self._get_url(
@@ -141,4 +147,7 @@ class Connection:
 
     # private methods
     def _get_url(self, url: str, query: dict) -> str:
-        return f"{config.connection.protocol}://{config.connection.server}{url}?{urllib.parse.urlencode(query)}"
+        protocol = config.connection.protocol
+        server = config.connection.server
+        query_encoded = urllib.parse.urlencode(query)
+        return f"{protocol}://{server}{url}?{query_encoded}"
